@@ -1,14 +1,13 @@
 
 {
-  "name": "siyam-sm-telegram-bot",
+  "name": "ads-siyam",
   "version": "1.0.0",
-  "private": true,
-  "description": "SIYAM SM Telegram Channel Verification Bot",
+  "description": "SIYAM Telegram Channel Membership Bot",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "node-telegram-bot-api": "^0.66.0"
+    "express": "^4.21.2"
   }
 }
