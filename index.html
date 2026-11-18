@@ -1,1 +1,151 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIYAM SM</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#eaf3ff,#c9e1ff);
+  color: #123c70;
+}
+
+.container {
+  max-width: 430px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px #00000015;
+  text-align: center;
+}
+
+.logo {
+  width: 75px;
+  height: 75px;
+  margin: auto;
+  border-radius: 22px;
+  background: linear-gradient(135deg,#1680ff,#06459d);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+h1 {
+  color: #1265c5;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #718096;
+  font-size: 14px;
+}
+
+.card {
+  background: #f1f7ff;
+  padding: 20px;
+  border-radius: 17px;
+  margin-top: 20px;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 12px;
+  background: #1769e0;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button:active {
+  opacity: .8;
+}
+
+.footer {
+  margin-top: 25px;
+  color: #8795a8;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="logo">SM</div>
+
+  <h1>SIYAM SM</h1>
+  <p class="subtitle">Welcome to SIYAM SM Mini App</p>
+
+  <div class="card">
+    <h2>স্বাগতম!</h2>
+    <p id="welcome">
+      আমাদের প্ল্যাটফর্মে তোমাকে স্বাগতম।
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>আমাদের সার্ভিস</h3>
+
+    <button onclick="showMessage('হোম পেজে স্বাগতম!')">
+      Home
+    </button>
+
+    <button onclick="showMessage('আমাদের সার্ভিস শীঘ্রই আসছে।')">
+      Services
+    </button>
+
+    <button onclick="showMessage('ধন্যবাদ SIYAM SM ব্যবহার করার জন্য।')">
+      About Us
+    </button>
+  </div>
+
+  <div class="footer">
+    © 2026 SIYAM SM | All Rights Reserved
+  </div>
+
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+
+  const user = tg.initDataUnsafe?.user;
+
+  if (user?.first_name) {
+    document.getElementById("welcome").innerText =
+      "স্বাগতম, " + user.first_name + "!";
+  }
+}
+
+function showMessage(message) {
+  if (tg) {
+    tg.showAlert(message);
+  } else {
+    alert(message);
+  }
+}
+</script>
+
+</body>
+</html>
