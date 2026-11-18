@@ -1,98 +1,140 @@
+const express = require("express");
 
-const TelegramBot = require("node-telegram-bot-api");
+const app = express();
+app.use(express.json());
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
-const CHANNEL_USERNAME = "@veterincam";
-const CHANNEL_LINK = "https://t.me/veterincam";
+const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || "@veterincam";
+const CHANNEL_LINK = process.env.CHANNEL_LINK || "https://t.me/veterincam";
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-if (!BOT_TOKEN) {
-  throw new Error("BOT_TOKEN environment variable is missing.");
+const PORT = process.env.PORT || 3000;
+const API = `https://api.telegram.org/bot${BOT_TOKEN}`;
+
+if (!BOT_TOKEN || !WEBHOOK_SECRET) {
+  throw new Error("BOT_TOKEN and WEBHOOK_SECRET are required");
 }
 
-const bot = new TelegramBot(BOT_TOKEN, {
-  polling: true
-});
+async function telegram(method, data = {}) {
+  const response = await fetch(`${API}/${method}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
 
-function sendJoinPrompt(chatId) {
-  return bot.sendMessage(
-    chatId,
-    "স্বাগতম! ❤️ SIYAM SM-এ প্রবেশ করতে আগে আমাদের Telegram Channel-এ যোগ দিন।",
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "📢 Join Channel",
-              url: CHANNEL_LINK
-            }
-          ],
-          [
-            {
-              text: "✅ Verify",
-              callback_data: "verify_channel"
-            }
-          ]
-        ]
-      }
-    }
+  const result = await response.json();
+
+  if (!result.ok) {
+    throw new Error(result.description || "Telegram API error");
+  }
+
+  return result.result;
+}
+
+async function sendMessage(chatId, text, replyMarkup) {
+  return telegram("sendMessage", {
+    chat_id: chatId,
+    text,
+    reply_markup: replyMarkup
+  });
+}
+
+async function checkMembership(userId) {
+  const member = await telegram("getChatMember", {
+    chat_id: CHANNEL_USERNAME,
+    user_id: userId
+  });
+
+  return (
+    ["creator", "administrator", "member"].includes(member.status) ||
+    (member.status === "restricted" && member.is_member === true)
   );
 }
 
-bot.onText(/^\/start(?:@\w+)?(?:\s|$)/, async (msg) => {
-  try {
-    await sendJoinPrompt(msg.chat.id);
-  } catch (error) {
-    console.error(error.message);
-  }
+app.get("/", (req, res) => {
+  res.send("SIYAM Telegram Bot is running");
 });
 
-bot.on("callback_query", async (query) => {
-  if (query.data !== "verify_channel") return;
+app.post("/telegram-webhook", async (req, res) => {
+  if (
+    req.get("X-Telegram-Bot-Api-Secret-Token") !== WEBHOOK_SECRET
+  ) {
+    return res.sendStatus(401);
+  }
 
-  const chatId = query.message?.chat?.id;
-  const userId = query.from.id;
+  // Telegram-কে দ্রুত update গ্রহণের নিশ্চয়তা দাও
+  res.sendStatus(200);
 
   try {
-    const member = await bot.getChatMember(
-      CHANNEL_USERNAME,
-      userId
-    );
+    const update = req.body;
 
-    const isMember = [
-      "member",
-      "administrator",
-      "creator"
-    ].includes(member.status);
+    if (update.message?.text === "/start") {
+      const chatId = update.message.chat.id;
 
-    if (isMember) {
-      await bot.answerCallbackQuery(query.id, {
-        text: "সদস্যতা যাচাই সফল!"
-      });
-
-      await bot.sendMessage(
+      await sendMessage(
         chatId,
-        "🎉 তোমার চ্যানেল সদস্যতা যাচাই হয়েছে। SIYAM SM-এ স্বাগতম!"
+        "স্বাগতম! বট ব্যবহার করতে প্রথমে আমাদের চ্যানেলে Join করুন। তারপর Verify চাপুন।",
+        {
+          inline_keyboard: [
+            [{ text: "📢 Join Channel", url: CHANNEL_LINK }],
+            [{ text: "✅ Verify", callback_data: "verify_membership" }]
+          ]
+        }
       );
-    } else {
-      await bot.answerCallbackQuery(query.id, {
-        text: "আগে চ্যানেলে Join করো।",
-        show_alert: true
-      });
+    }
 
-      await sendJoinPrompt(chatId);
+    if (update.callback_query) {
+      const query = update.callback_query;
+
+      if (query.data === "verify_membership") {
+        await telegram("answerCallbackQuery", {
+          callback_query_id: query.id,
+          text: "Membership যাচাই করা হচ্ছে..."
+        });
+
+        const isMember = await checkMembership(query.from.id);
+
+        if (isMember) {
+          await sendMessage(
+            query.message.chat.id,
+            "✅ সফল! তুমি চ্যানেলে যুক্ত আছো।"
+          );
+        } else {
+          await sendMessage(
+            query.message.chat.id,
+            "❌ তোমাকে এখনো চ্যানেলের সদস্য হিসেবে পাওয়া যায়নি। Join করে আবার Verify চাপো।",
+            {
+              inline_keyboard: [
+                [{ text: "📢 Join Channel", url: CHANNEL_LINK }],
+                [{ text: "🔄 Verify Again", callback_data: "verify_membership" }]
+              ]
+            }
+          );
+        }
+      }
     }
   } catch (error) {
-    console.error(error.message);
-
-    await bot.answerCallbackQuery(query.id, {
-      text: "যাচাই করা যাচ্ছে না। বটটি চ্যানেলের Admin কি না দেখো।",
-      show_alert: true
-    });
+    console.error("Bot update error:", error.message);
   }
 });
 
-bot.on("polling_error", (error) => {
-  console.error("Polling error:", error.message);
+app.listen(PORT, "0.0.0.0", async () => {
+  console.log(`Bot server running on port ${PORT}`);
+
+  if (WEBHOOK_URL) {
+    try {
+      await telegram("setWebhook", {
+        url: `${WEBHOOK_URL}/telegram-webhook`,
+        secret_token: WEBHOOK_SECRET
+      });
+
+      console.log("Telegram webhook configured");
+    } catch (error) {
+      console.error("Webhook setup failed:", error.message);
+    }
+  } else {
+    console.log("WEBHOOK_URL is not set yet");
+  }
 });
 
-console.log("SIYAM SM Telegram Bot is running!");
