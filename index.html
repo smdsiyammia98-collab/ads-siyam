@@ -6,12 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIYAM SM</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <style>
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   padding: 20px;
@@ -19,7 +17,6 @@ body {
   background: linear-gradient(135deg,#eaf3ff,#c9e1ff);
   color: #123c70;
 }
-
 .container {
   max-width: 430px;
   margin: 30px auto;
@@ -29,7 +26,6 @@ body {
   box-shadow: 0 8px 30px #00000015;
   text-align: center;
 }
-
 .logo {
   width: 75px;
   height: 75px;
@@ -42,45 +38,37 @@ body {
   font-size: 25px;
   font-weight: bold;
 }
-
 h1 {
   color: #1265c5;
   margin-bottom: 5px;
 }
-
 .subtitle {
   color: #718096;
   font-size: 14px;
 }
-
 .card {
   background: #f1f7ff;
   padding: 20px;
   border-radius: 17px;
   margin-top: 20px;
 }
-
 .balance {
   font-size: 30px;
   font-weight: bold;
   color: #1265c5;
   margin: 12px 0;
 }
-
 .wallet-label {
   color: #718096;
   font-size: 13px;
 }
-
 .wallet-actions {
   display: flex;
   gap: 10px;
 }
-
 .wallet-actions button {
   flex: 1;
 }
-
 button {
   width: 100%;
   border: none;
@@ -93,21 +81,17 @@ button {
   font-weight: bold;
   cursor: pointer;
 }
-
 button:active {
   opacity: .8;
 }
-
 .secondary {
   background: #06459d;
 }
-
 .history {
   color: #718096;
   font-size: 14px;
   padding: 12px 0;
 }
-
 .footer {
   margin-top: 25px;
   color: #8795a8;
@@ -115,41 +99,27 @@ button:active {
 }
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
   <div class="logo">SM</div>
-
   <h1>SIYAM SM</h1>
   <p class="subtitle">Welcome to SIYAM SM Mini App</p>
 
   <div class="card">
     <h2>Welcome!</h2>
-    <p id="welcome">
-      Welcome to our platform.
-    </p>
+    <p id="welcome">Welcome to our platform.</p>
   </div>
 
   <div class="card">
     <h2>My Wallet</h2>
-
     <p class="wallet-label">My Balance</p>
     <div class="balance" id="balance">—</div>
-
     <p class="wallet-label">
       Total Earnings: <strong id="earnings">—</strong>
     </p>
-
     <div class="wallet-actions">
-      <button onclick="walletMessage('Deposit')">
-        Deposit
-      </button>
-
-      <button class="secondary" onclick="walletMessage('Withdraw')">
-        Withdraw
-      </button>
+      <button onclick="walletMessage('Deposit')">Deposit</button>
+      <button class="secondary" onclick="walletMessage('Withdraw')">Withdraw</button>
     </div>
   </div>
 
@@ -162,24 +132,14 @@ button:active {
 
   <div class="card">
     <h3>Our Services</h3>
-
-    <button onclick="showMessage('Welcome to the Home Page!')">
-      Home
-    </button>
-
-    <button onclick="showMessage('Our services are coming soon.')">
-      Services
-    </button>
-
-    <button onclick="showMessage('Thank you for using SIYAM SM.')">
-      About Us
-    </button>
+    <button onclick="showMessage('Welcome to the Home Page!')">Home</button>
+    <button onclick="showMessage('Our services are coming soon.')">Services</button>
+    <button onclick="showMessage('Thank you for using SIYAM SM.')">About Us</button>
   </div>
 
   <div class="footer">
     © 2026 SIYAM SM | All Rights Reserved
   </div>
-
 </div>
 
 <script>
@@ -211,6 +171,5 @@ function walletMessage(action) {
   );
 }
 </script>
-
 </body>
 </html>
