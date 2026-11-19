@@ -2,174 +2,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIYAM SM</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-* {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg,#eaf3ff,#c9e1ff);
-  color: #123c70;
-}
-.container {
-  max-width: 430px;
-  margin: 30px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 24px;
-  box-shadow: 0 8px 30px #00000015;
-  text-align: center;
-}
-.logo {
-  width: 75px;
-  height: 75px;
-  margin: auto;
-  border-radius: 22px;
-  background: linear-gradient(135deg,#1680ff,#06459d);
-  color: white;
-  display: grid;
-  place-items: center;
-  font-size: 25px;
-  font-weight: bold;
-}
-h1 {
-  color: #1265c5;
-  margin-bottom: 5px;
-}
-.subtitle {
-  color: #718096;
-  font-size: 14px;
-}
-.card {
-  background: #f1f7ff;
-  padding: 20px;
-  border-radius: 17px;
-  margin-top: 20px;
-}
-.balance {
-  font-size: 30px;
-  font-weight: bold;
-  color: #1265c5;
-  margin: 12px 0;
-}
-.wallet-label {
-  color: #718096;
-  font-size: 13px;
-}
-.wallet-actions {
-  display: flex;
-  gap: 10px;
-}
-.wallet-actions button {
-  flex: 1;
-}
-button {
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  padding: 15px;
-  margin-top: 12px;
-  background: #1769e0;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-button:active {
-  opacity: .8;
-}
-.secondary {
-  background: #06459d;
-}
-.history {
-  color: #718096;
-  font-size: 14px;
-  padding: 12px 0;
-}
-.footer {
-  margin-top: 25px;
-  color: #8795a8;
-  font-size: 12px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADS SIYAM</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #eef5ff;
+      color: #17345c;
+    }
+    .app { max-width: 450px; margin: auto; }
+    .header {
+      background: linear-gradient(135deg,#1680ff,#06459d);
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-top: 15px;
+      box-shadow: 0 4px 15px #17345c12;
+    }
+    .balance { font-size: 28px; font-weight: bold; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #1675e8;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .secondary { background: #e6f0ff; color: #1254a0; }
+    h3 { margin-top: 0; }
+    .muted { color: #78889e; font-size: 14px; }
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="logo">SM</div>
-  <h1>SIYAM SM</h1>
-  <p class="subtitle">Welcome to SIYAM SM Mini App</p>
+  <main class="app">
+    <header class="header">
+      <h1>ADS SIYAM</h1>
+      <p>Welcome to our Mini App</p>
+    </header>
 
-  <div class="card">
-    <h2>Welcome!</h2>
-    <p id="welcome">Welcome to our platform.</p>
-  </div>
+    <section class="card">
+      <h3>My Wallet</h3>
+      <div class="balance">৳0.00</div>
+      <p class="muted">Demo balance</p>
+    </section>
 
-  <div class="card">
-    <h2>My Wallet</h2>
-    <p class="wallet-label">My Balance</p>
-    <div class="balance" id="balance">—</div>
-    <p class="wallet-label">
-      Total Earnings: <strong id="earnings">—</strong>
-    </p>
-    <div class="wallet-actions">
-      <button onclick="walletMessage('Deposit')">Deposit</button>
-      <button class="secondary" onclick="walletMessage('Withdraw')">Withdraw</button>
-    </div>
-  </div>
+    <section class="card">
+      <h3>Total Earnings</h3>
+      <div class="balance">৳0.00</div>
+      <p class="muted">Demo earnings</p>
+    </section>
 
-  <div class="card">
-    <h3>Transaction History</h3>
-    <p class="history" id="history">
-      No transactions available yet.
-    </p>
-  </div>
+    <section class="card grid">
+      <button onclick="notify('Deposit is coming soon.')">Deposit</button>
+      <button onclick="notify('Withdraw is coming soon.')">Withdraw</button>
+    </section>
 
-  <div class="card">
-    <h3>Our Services</h3>
-    <button onclick="showMessage('Welcome to the Home Page!')">Home</button>
-    <button onclick="showMessage('Our services are coming soon.')">Services</button>
-    <button onclick="showMessage('Thank you for using SIYAM SM.')">About Us</button>
-  </div>
+    <section class="card">
+      <h3>Transaction History</h3>
+      <p class="muted">No transactions available yet.</p>
+    </section>
 
-  <div class="footer">
-    © 2026 SIYAM SM | All Rights Reserved
-  </div>
-</div>
+    <section class="card">
+      <h3>Our Services</h3>
+      <button class="secondary" onclick="notify('Welcome Home!')">Home</button>
+      <br><br>
+      <button class="secondary" onclick="notify('Services coming soon.')">Services</button>
+      <br><br>
+      <button class="secondary" onclick="notify('Thank you for using ADS SIYAM.')">About Us</button>
+    </section>
+  </main>
 
-<script>
-const tg = window.Telegram?.WebApp;
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
 
-if (tg) {
-  tg.ready();
-  tg.expand();
-
-  const user = tg.initDataUnsafe?.user;
-
-  if (user?.first_name) {
-    document.getElementById("welcome").innerText =
-      "Welcome, " + user.first_name + "!";
-  }
-}
-
-function showMessage(message) {
-  if (tg) {
-    tg.showAlert(message);
-  } else {
-    alert(message);
-  }
-}
-
-function walletMessage(action) {
-  showMessage(
-    action + " feature is not available yet. Please check back later."
-  );
-}
-</script>
+    function notify(message) {
+      if (tg.showAlert) tg.showAlert(message);
+      else alert(message);
+    }
+  </script>
 </body>
 </html>
