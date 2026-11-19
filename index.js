@@ -1,6 +1,7 @@
-const express = require("express");
 
+const express = require("express");
 const app = express();
+
 app.use(express.json());
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
@@ -8,8 +9,8 @@ const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || "@veterincam";
 const CHANNEL_LINK = process.env.CHANNEL_LINK || "https://t.me/veterincam";
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
 const WEBHOOK_SECRET = (process.env.WEBHOOK_SECRET || "").trim();
-
 const PORT = process.env.PORT || 3000;
+
 const API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
 if (!BOT_TOKEN || !WEBHOOK_SECRET) {
@@ -63,7 +64,7 @@ app.post("/telegram-webhook", async (req, res) => {
     return res.sendStatus(401);
   }
 
-  // Telegram-কে দ্রুত update গ্রহণের নিশ্চয়তা দাও
+  // Acknowledge the update quickly.
   res.sendStatus(200);
 
   try {
@@ -74,11 +75,11 @@ app.post("/telegram-webhook", async (req, res) => {
 
       await sendMessage(
         chatId,
-        "স্বাগতম! বট ব্যবহার করতে প্রথমে আমাদের চ্যানেলে Join করুন। তারপর Verify চাপুন।",
+        "Welcome to SIYAM SM! To use this bot, please join our channel first. Then tap Verify Membership.",
         {
           inline_keyboard: [
             [{ text: "📢 Join Channel", url: CHANNEL_LINK }],
-            [{ text: "✅ Verify", callback_data: "verify_membership" }]
+            [{ text: "✅ Verify Membership", callback_data: "verify_membership" }]
           ]
         }
       );
@@ -90,7 +91,7 @@ app.post("/telegram-webhook", async (req, res) => {
       if (query.data === "verify_membership") {
         await telegram("answerCallbackQuery", {
           callback_query_id: query.id,
-          text: "Membership যাচাই করা হচ্ছে..."
+          text: "Checking your channel membership..."
         });
 
         const isMember = await checkMembership(query.from.id);
@@ -98,12 +99,12 @@ app.post("/telegram-webhook", async (req, res) => {
         if (isMember) {
           await sendMessage(
             query.message.chat.id,
-            "✅ সফল! তুমি চ্যানেলে যুক্ত আছো।"
+            "✅ Success! You have joined our channel. Welcome to SIYAM SM!"
           );
         } else {
           await sendMessage(
             query.message.chat.id,
-            "❌ তোমাকে এখনো চ্যানেলের সদস্য হিসেবে পাওয়া যায়নি। Join করে আবার Verify চাপো।",
+            "❌ You are not a member of our channel yet. Please join the channel and tap Verify Again.",
             {
               inline_keyboard: [
                 [{ text: "📢 Join Channel", url: CHANNEL_LINK }],
@@ -137,4 +138,3 @@ app.listen(PORT, "0.0.0.0", async () => {
     console.log("WEBHOOK_URL is not set yet");
   }
 });
-
