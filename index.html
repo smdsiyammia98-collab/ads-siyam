@@ -1,11 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIYAM SM</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -61,6 +60,27 @@ h1 {
   margin-top: 20px;
 }
 
+.balance {
+  font-size: 30px;
+  font-weight: bold;
+  color: #1265c5;
+  margin: 12px 0;
+}
+
+.wallet-label {
+  color: #718096;
+  font-size: 13px;
+}
+
+.wallet-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.wallet-actions button {
+  flex: 1;
+}
+
 button {
   width: 100%;
   border: none;
@@ -71,10 +91,21 @@ button {
   color: white;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 button:active {
   opacity: .8;
+}
+
+.secondary {
+  background: #06459d;
+}
+
+.history {
+  color: #718096;
+  font-size: 14px;
+  padding: 12px 0;
 }
 
 .footer {
@@ -95,24 +126,52 @@ button:active {
   <p class="subtitle">Welcome to SIYAM SM Mini App</p>
 
   <div class="card">
-    <h2>স্বাগতম!</h2>
+    <h2>Welcome!</h2>
     <p id="welcome">
-      আমাদের প্ল্যাটফর্মে তোমাকে স্বাগতম।
+      Welcome to our platform.
     </p>
   </div>
 
   <div class="card">
-    <h3>আমাদের সার্ভিস</h3>
+    <h2>My Wallet</h2>
 
-    <button onclick="showMessage('হোম পেজে স্বাগতম!')">
+    <p class="wallet-label">My Balance</p>
+    <div class="balance" id="balance">—</div>
+
+    <p class="wallet-label">
+      Total Earnings: <strong id="earnings">—</strong>
+    </p>
+
+    <div class="wallet-actions">
+      <button onclick="walletMessage('Deposit')">
+        Deposit
+      </button>
+
+      <button class="secondary" onclick="walletMessage('Withdraw')">
+        Withdraw
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Transaction History</h3>
+    <p class="history" id="history">
+      No transactions available yet.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Our Services</h3>
+
+    <button onclick="showMessage('Welcome to the Home Page!')">
       Home
     </button>
 
-    <button onclick="showMessage('আমাদের সার্ভিস শীঘ্রই আসছে।')">
+    <button onclick="showMessage('Our services are coming soon.')">
       Services
     </button>
 
-    <button onclick="showMessage('ধন্যবাদ SIYAM SM ব্যবহার করার জন্য।')">
+    <button onclick="showMessage('Thank you for using SIYAM SM.')">
       About Us
     </button>
   </div>
@@ -134,7 +193,7 @@ if (tg) {
 
   if (user?.first_name) {
     document.getElementById("welcome").innerText =
-      "স্বাগতম, " + user.first_name + "!";
+      "Welcome, " + user.first_name + "!";
   }
 }
 
@@ -144,6 +203,12 @@ function showMessage(message) {
   } else {
     alert(message);
   }
+}
+
+function walletMessage(action) {
+  showMessage(
+    action + " feature is not available yet. Please check back later."
+  );
 }
 </script>
 
