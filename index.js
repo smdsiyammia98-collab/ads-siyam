@@ -7,7 +7,7 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHANNEL_USERNAME = process.env.CHANNEL_USERNAME || "@veterincam";
 const CHANNEL_LINK = process.env.CHANNEL_LINK || "https://t.me/veterincam";
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+const WEBHOOK_SECRET = (process.env.WEBHOOK_SECRET || "").trim();
 
 const PORT = process.env.PORT || 3000;
 const API = `https://api.telegram.org/bot${BOT_TOKEN}`;
