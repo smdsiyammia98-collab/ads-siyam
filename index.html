@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ADS SIYAM</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 20px;
@@ -15,14 +18,20 @@
       background: #eef5ff;
       color: #17345c;
     }
-    .app { max-width: 450px; margin: auto; }
+
+    .app {
+      max-width: 450px;
+      margin: auto;
+    }
+
     .header {
-      background: linear-gradient(135deg,#1680ff,#06459d);
+      background: linear-gradient(135deg, #1680ff, #06459d);
       color: white;
       padding: 25px;
       border-radius: 20px;
       text-align: center;
     }
+
     .card {
       background: white;
       padding: 20px;
@@ -30,8 +39,19 @@
       margin-top: 15px;
       box-shadow: 0 4px 15px #17345c12;
     }
-    .balance { font-size: 28px; font-weight: bold; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .balance {
+      font-size: 28px;
+      font-weight: bold;
+      color: #1675e8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     button {
       width: 100%;
       padding: 15px;
@@ -43,16 +63,37 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .secondary { background: #e6f0ff; color: #1254a0; }
-    h3 { margin-top: 0; }
-    .muted { color: #78889e; font-size: 14px; }
+
+    .secondary {
+      background: #e6f0ff;
+      color: #1254a0;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: #78889e;
+      font-size: 14px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #78889e;
+      font-size: 12px;
+    }
   </style>
 </head>
+
 <body>
   <main class="app">
+
     <header class="header">
       <h1>ADS SIYAM</h1>
       <p>Welcome to our Mini App</p>
+      <p id="username">Welcome!</p>
     </header>
 
     <section class="card">
@@ -68,8 +109,13 @@
     </section>
 
     <section class="card grid">
-      <button onclick="notify('Deposit is coming soon.')">Deposit</button>
-      <button onclick="notify('Withdraw is coming soon.')">Withdraw</button>
+      <button onclick="notify('Deposit is coming soon.')">
+        Deposit
+      </button>
+
+      <button onclick="notify('Withdraw is coming soon.')">
+        Withdraw
+      </button>
     </section>
 
     <section class="card">
@@ -79,23 +125,56 @@
 
     <section class="card">
       <h3>Our Services</h3>
-      <button class="secondary" onclick="notify('Welcome Home!')">Home</button>
+
+      <button class="secondary"
+        onclick="notify('Welcome Home!')">
+        Home
+      </button>
+
       <br><br>
-      <button class="secondary" onclick="notify('Services coming soon.')">Services</button>
+
+      <button class="secondary"
+        onclick="notify('Services coming soon.')">
+        Services
+      </button>
+
       <br><br>
-      <button class="secondary" onclick="notify('Thank you for using ADS SIYAM.')">About Us</button>
+
+      <button class="secondary"
+        onclick="notify('Thank you for using ADS SIYAM.')">
+        About Us
+      </button>
     </section>
+
+    <div class="footer">
+      © 2026 ADS SIYAM | All Rights Reserved
+    </div>
+
   </main>
 
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
+    const tg = window.Telegram?.WebApp;
+
+    if (tg) {
+      tg.ready();
+      tg.expand();
+
+      const user = tg.initDataUnsafe?.user;
+
+      if (user?.first_name) {
+        document.getElementById("username").innerText =
+          "Welcome, " + user.first_name + "!";
+      }
+    }
 
     function notify(message) {
-      if (tg.showAlert) tg.showAlert(message);
-      else alert(message);
+      if (tg && tg.showAlert) {
+        tg.showAlert(message);
+      } else {
+        alert(message);
+      }
     }
   </script>
+
 </body>
 </html>
